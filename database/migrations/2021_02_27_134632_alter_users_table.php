@@ -18,6 +18,7 @@ class AlterUsersTable extends Migration
             'users',
             function (Blueprint $table) {
                 $table->enum('role', [User::ROLE_CLIENT, User::ROLE_MANAGER])
+                    ->after('id')
                     ->default(User::ROLE_CLIENT);
             }
         );
