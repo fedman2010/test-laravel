@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Application;
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreApplicationRequest extends FormRequest
@@ -13,7 +15,7 @@ class StoreApplicationRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->can('create', Application::class);
     }
 
     /**
@@ -26,7 +28,7 @@ class StoreApplicationRequest extends FormRequest
         return [
             'topic' => 'required|max:255',
             'message' => 'required',
-            'file' => 'required|file|max:1024',
+            'file' => 'required|file|max:100',
         ];
     }
 }

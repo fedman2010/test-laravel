@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Models\Application;
 use Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ApplicationsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -22,38 +24,49 @@ class ApplicationsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
+     * @throws AuthorizationException
      */
     public function create()
     {
-        //
+        $this->authorize('create', Application::class);
+
+        $application = new Application();
+
+        return response()->view('application.create', compact('application'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
+     * @throws AuthorizationException
      */
     public function store(StoreApplicationRequest $request)
     {
+        $this->authorize('create', Application::class);
+
         $path = $request->file('file')->store('attachments');
 
-        Application::create([
-            'topic' => $request->input('topic'),
-            'message' => $request->input('message'),
-            'file' => $path,
-            'user_id' => Auth::getUser()->id
-        ]);
+        Application::create(
+            [
+                'topic' => $request->input('topic'),
+                'message' => $request->input('message'),
+                'file' => $path,
+                'user_id' => Auth::getUser()->id
+            ]
+        );
 
-        return redirect();
+        return redirect('/applications');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
+     * @throws AuthorizationException
      */
     public function show($id)
     {
@@ -61,14 +74,14 @@ class ApplicationsController extends Controller
 
         $this->authorize('view', $application);
 
-        return response()->view('applications.show', compact('application'));
+        return response()->view('application.show', compact('application'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function edit($id)
     {
@@ -78,9 +91,9 @@ class ApplicationsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -90,8 +103,8 @@ class ApplicationsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Response
      */
     public function destroy($id)
     {
