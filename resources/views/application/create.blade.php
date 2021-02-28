@@ -33,6 +33,9 @@
                             @error('file')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
+                            @error('created_at')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <x-button type="submit">

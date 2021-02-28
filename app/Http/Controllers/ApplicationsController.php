@@ -18,7 +18,7 @@ class ApplicationsController extends Controller
      */
     public function index()
     {
-        //
+        return response()->view('application.index');
     }
 
     /**

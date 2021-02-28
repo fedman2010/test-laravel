@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Application;
-use Auth;
+use App\Rules\OnePerDayRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreApplicationRequest extends FormRequest
@@ -29,6 +29,7 @@ class StoreApplicationRequest extends FormRequest
             'topic' => 'required|max:255',
             'message' => 'required',
             'file' => 'required|file|max:100',
+            'created_at' => [new OnePerDayRule(Application::class)],
         ];
     }
 }
