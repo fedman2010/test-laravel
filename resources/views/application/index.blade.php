@@ -11,15 +11,30 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     @foreach($applications as $key => $application)
                         <div>
-                            <h1>Application#{{ $key }}</h1>
-                            <h3>Topic: {{ $application->topic }}</h3>
+                            <p>ID: {{ $application->id }}</p>
+                            <p>Topic: {{ $application->topic }}</p>
                             <p>Message: {{ $application->message }}</p>
+                            @if($user->isManager())
+                                <p>Name: {{ $application->user->name }}</p>
+                                <p>Email: {{ $application->user->email }}</p>
+                            @endif
                             <p>Attachment: {{ $application->file }}</p>
                             <p>Created: {{ $application->created_at }}</p>
+                            @if($user->isManager())
+                                @if($application->responded_at !== null)
+                                    <p>[responded]</p>
+                                @else
+                                    <p>[not responded]</p>
+                                @endif
+                                <a style="color: blue;text-decoration: underline;" href="/applications/{{ $application->id }}">VIEW</a>
+                            @endif
                         </div>
                         <br>
                         <br>
                     @endforeach
+                    @if($applications->count() === 0)
+                        There are no applications yet.
+                    @endif
                 </div>
             </div>
         </div>

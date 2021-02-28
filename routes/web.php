@@ -25,3 +25,6 @@ require __DIR__.'/auth.php';
 
 Route::resource('applications', \App\Http\Controllers\ApplicationsController::class)
     ->middleware('auth');
+Route::get('/applications/mark/{id}', [\App\Http\Controllers\ApplicationsController::class, 'mark'])
+    ->middleware('auth');
+

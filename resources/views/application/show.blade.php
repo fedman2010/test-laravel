@@ -9,12 +9,23 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <h3>Topic:</h3>
-                    <p>{{ $application->topic }}</p>
-                    <h3>Message:</h3>
-                    <p>{{ $application->message }}</p>
-                    <h3>File:</h3>
-                    <p>{{ $application->file }}</p>
+                    <p>ID: {{ $application->id }}</p>
+                    <p>Topic: {{ $application->topic }}</p>
+                    <p>Message: {{ $application->message }}</p>
+                    @if(Auth::getUser()->isManager())
+                        <p>Name: {{ $application->user->name }}</p>
+                        <p>Email: {{ $application->user->email }}</p>
+                    @endif
+                    <p>Attachment: {{ $application->file }}</p>
+                    <p>Created: {{ $application->created_at }}</p>
+                    @if(Auth::getUser()->isManager())
+                        @if($application->responded_at !== null)
+                            <p>[responded]</p>
+                        @else
+                            <p>[not responded]</p>
+                        @endif
+                        <a style="color: blue;text-decoration: underline;" href="/applications/mark/{{ $application->id }}">MARK AS RESPONDED</a>
+                    @endif
                 </div>
             </div>
         </div>

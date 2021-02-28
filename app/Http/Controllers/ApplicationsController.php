@@ -9,6 +9,7 @@ use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Date;
 
 class ApplicationsController extends Controller
 {
@@ -20,15 +21,16 @@ class ApplicationsController extends Controller
     public function index()
     {
         $user = Auth::getUser();
-        $applications = [];
 
         if ($user->isManager()) {
             $applications = Application::all();
-        } elseif ($user->isClient()) {
-            $applications = Application::where(['user_id' => $user->id])->get();
+            return response()->view('application.index', compact('applications', 'user'));
         }
 
-        return response()->view('application.index', compact('applications'));
+        if ($user->isClient()) {
+            $applications = Application::where(['user_id' => $user->id])->get();
+            return response()->view('application.index', compact('applications', 'user'));
+        }
     }
 
     /**
@@ -80,36 +82,19 @@ class ApplicationsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Update application.
      *
      * @param Request $request
      * @param int $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function mark(Request $request, $id)
     {
-        //
-    }
+        $this->authorize('mark', Application::class);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+        $application = Application::findOrFail($id);
+        $application->update(['responded_at' => Date::now()]);
+
+        return redirect('/applications/' . $application->id);
     }
 }

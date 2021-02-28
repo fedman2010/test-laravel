@@ -21,7 +21,7 @@
 
                         <div>
                             <label for="message">Message</label>
-                            <input id="message" type="text" class="@error('message') is-invalid @enderror" name="message">
+                            <textarea id="message" class="@error('message') is-invalid @enderror" name="message"></textarea>
                             @error('message')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror

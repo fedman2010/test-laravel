@@ -34,6 +34,8 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::getUser()->isClient()) {
             return redirect('/applications/create');
+        } elseif (Auth::getUser()->isManager()) {
+            return redirect('/applications');
         }
 
         return redirect()->intended(RouteServiceProvider::HOME);

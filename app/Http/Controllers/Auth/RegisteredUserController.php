@@ -46,6 +46,13 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        $user->refresh();
+        if ($user->isClient()) {
+            return redirect('/applications/create');
+        } elseif ($user->isManager()) {
+            return redirect('/applications');
+        }
+
         return redirect(RouteServiceProvider::HOME);
     }
 }

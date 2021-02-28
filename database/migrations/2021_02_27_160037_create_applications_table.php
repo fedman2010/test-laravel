@@ -24,6 +24,7 @@ class CreateApplicationsTable extends Migration
                 $table->string('topic');
                 $table->text('message');
                 $table->string('file');
+                $table->timestamp('responded_at')->nullable();
                 $table->timestamps();
             }
         );
