@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreApplicationRequest;
 use App\Models\Application;
+use App\Services\CreateApplicationService;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -56,16 +57,8 @@ class ApplicationsController extends Controller
     {
         $this->authorize('create', Application::class);
 
-        $path = $request->file('file')->store('attachments');
-
-        Application::create(
-            [
-                'topic' => $request->input('topic'),
-                'message' => $request->input('message'),
-                'file' => $path,
-                'user_id' => Auth::getUser()->id
-            ]
-        );
+        $createApplicationService = new CreateApplicationService();
+        $createApplicationService->handle($request->validated());
 
         return redirect('/applications');
     }
