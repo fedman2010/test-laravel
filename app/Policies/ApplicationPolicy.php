@@ -18,7 +18,7 @@ class ApplicationPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isManager();
+        return $user->isManager() || $user->isClient();
     }
 
     /**

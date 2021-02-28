@@ -18,7 +18,16 @@ class ApplicationsController extends Controller
      */
     public function index()
     {
-        return response()->view('application.index');
+        $user = Auth::getUser();
+        $applications = [];
+
+        if ($user->isManager()) {
+            $applications = Application::all();
+        } elseif ($user->isClient()) {
+            $applications = Application::where(['user_id' => $user->id])->get();
+        }
+
+        return response()->view('application.index', compact('applications'));
     }
 
     /**
