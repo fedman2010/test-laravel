@@ -16,9 +16,17 @@ Project's purpose is to practice using Laravel framework.
 
 To set up project on your computer you need `docker` and `docker-compose` installed on your computer.
 Then just run:
-`sail up`  
-`sail php artisan migrate`
-`sail php artisan db:seed`
+
+```
+docker run --rm -v $(pwd):/opt -w /opt laravelsail/php80-composer:latest bash -c "composer install"  
+alias sail='bash vendor/bin/sail'
+cp .env.example .env
+sail up -d
+sail artisan key:generate
+sail php artisan migrate  #if error you might need to wait for mysql service to stop booting process(sail logs).  
+sail php artisan db:seed
+```
+
 We finished set up. Got to `http://localhost`
 
 ### Redis queue setup
