@@ -23,9 +23,11 @@ alias sail='bash vendor/bin/sail'
 cp .env.example .env
 sail up -d
 sail artisan key:generate
-sail php artisan migrate  #if error you might need to wait for mysql service to stop booting process(sail logs).  
+sail php artisan migrate   
 sail php artisan db:seed
 ```
+If error occurs during migrating you might need to wait for mysql service to finish booting process.
+Check when mysql ready with `sail logs -f` 
 
 We finished set up. Got to `http://localhost`
 
